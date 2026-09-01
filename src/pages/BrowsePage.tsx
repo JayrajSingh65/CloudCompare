@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import { useCloudData } from '../context/CloudDataContext';
+import { useAuth } from '../context/AuthContext';
 import { PlatformBadge } from '../components/common/PlatformBadge';
 import { CategoryBadge } from '../components/common/CategoryBadge';
 import type { ServiceCategory, Platform } from '../types/cloud';
@@ -11,13 +12,15 @@ import {
   List as ListIcon,
   ArrowRight,
   Columns2,
-  PlusCircle
+  PlusCircle,
+  Lock
 } from 'lucide-react';
 
 export const BrowsePage: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const { services, categories, getService } = useCloudData();
+  const { isAdmin, openLoginModal } = useAuth();
 
   const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '');
   const [selectedPlatform, setSelectedPlatform] = useState<'all' | Platform>(
@@ -39,7 +42,6 @@ export const BrowsePage: React.FC = () => {
   }, [searchParams]);
 
   const filteredServices = services.filter(service => {
-    // Search Query
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       const nameMatch = service.serviceName.toLowerCase().includes(q);
@@ -49,17 +51,14 @@ export const BrowsePage: React.FC = () => {
       if (!nameMatch && !catMatch && !descMatch && !featMatch) return false;
     }
 
-    // Platform
     if (selectedPlatform !== 'all' && service.platform !== selectedPlatform) {
       return false;
     }
 
-    // Category
     if (selectedCategory !== 'all' && service.category !== selectedCategory) {
       return false;
     }
 
-    // Paired Only
     if (pairedOnly && !service.equivalentServiceId) {
       return false;
     }
@@ -73,6 +72,13 @@ export const BrowsePage: React.FC = () => {
     setSelectedCategory('all');
     setPairedOnly(false);
     setSearchParams({});
+  };
+
+  const handleAddServiceClick = (e: React.MouseEvent) => {
+    if (!isAdmin) {
+      e.preventDefault();
+      openLoginModal();
+    }
   };
 
   return (
@@ -90,9 +96,11 @@ export const BrowsePage: React.FC = () => {
 
         <Link
           to="/manage"
+          onClick={handleAddServiceClick}
           className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 text-xs font-bold hover:bg-blue-600 dark:hover:bg-blue-400 dark:hover:text-white transition-colors cursor-pointer self-start sm:self-auto"
         >
-          <PlusCircle className="w-4 h-4" /> Add Service Entry
+          {isAdmin ? <PlusCircle className="w-4 h-4" /> : <Lock className="w-3.5 h-3.5" />}
+          Add Service Entry
         </Link>
       </div>
 
@@ -261,7 +269,6 @@ export const BrowsePage: React.FC = () => {
                     {service.description.replace(/[#*`]/g, '')}
                   </p>
 
-                  {/* Key features tags */}
                   {service.keyFeatures.length > 0 && (
                     <div className="flex flex-wrap gap-1 mb-4">
                       {service.keyFeatures.slice(0, 3).map((feat, idx) => (
@@ -276,7 +283,6 @@ export const BrowsePage: React.FC = () => {
                   )}
                 </div>
 
-                {/* Bottom CTA & Linked Counterpart */}
                 <div className="pt-4 border-t border-slate-100 dark:border-slate-800/80 space-y-2">
                   <div className="text-[11px] text-slate-500 dark:text-slate-400 font-mono truncate">
                     <span className="text-slate-400">Pricing:</span> {service.pricingModel}
@@ -310,7 +316,6 @@ export const BrowsePage: React.FC = () => {
           })}
         </div>
       ) : (
-        /* List View */
         <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-xs">
           <table className="w-full text-left text-xs">
             <thead>
@@ -372,6 +377,7 @@ export const BrowsePage: React.FC = () => {
                       ) : (
                         <Link
                           to="/manage"
+                          onClick={handleAddServiceClick}
                           className="text-slate-400 hover:text-blue-600 font-medium"
                         >
                           Link Pair
