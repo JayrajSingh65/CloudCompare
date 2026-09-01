@@ -7,6 +7,8 @@ import { CategoryBadge } from '../components/common/CategoryBadge';
 import { MarkdownViewer } from '../components/common/MarkdownViewer';
 import { ConfigDifferencesTable } from '../components/compare/ConfigDifferencesTable';
 import { SummaryCallout } from '../components/compare/SummaryCallout';
+import { IacSnippetsViewer } from '../components/compare/IacSnippetsViewer';
+import { CostEstimatorWidget } from '../components/compare/CostEstimatorWidget';
 import {
   Columns2,
   ExternalLink,
@@ -281,7 +283,7 @@ export const ComparePage: React.FC = () => {
 
               {/* Documentation Footer Link */}
               {azureService.documentationLink && (
-                <div className="p-4 bg-slate-50 dark:bg-slate-850 border-t border-slate-200 dark:border-slate-800 text-center">
+                <div className="p-4 bg-sky-50/50 dark:bg-sky-950/40 border-t border-sky-100 dark:border-sky-900/60 text-center">
                   <a
                     href={azureService.documentationLink}
                     target="_blank"
@@ -380,7 +382,7 @@ export const ComparePage: React.FC = () => {
 
               {/* Documentation Footer Link */}
               {awsService.documentationLink && (
-                <div className="p-4 bg-slate-50 dark:bg-slate-850 border-t border-slate-200 dark:border-slate-800 text-center">
+                <div className="p-4 bg-amber-50/50 dark:bg-amber-950/40 border-t border-amber-100 dark:border-amber-900/60 text-center">
                   <a
                     href={awsService.documentationLink}
                     target="_blank"
@@ -393,6 +395,12 @@ export const ComparePage: React.FC = () => {
               )}
             </div>
           </div>
+
+          {/* Interactive Sizing & Cost Estimator Widget */}
+          <CostEstimatorWidget azureService={azureService} awsService={awsService} />
+
+          {/* Infrastructure-as-Code (IaC) Snippets Viewer */}
+          <IacSnippetsViewer azureService={azureService} awsService={awsService} />
 
           {/* Dedicated Configuration Differences Table */}
           <ConfigDifferencesTable

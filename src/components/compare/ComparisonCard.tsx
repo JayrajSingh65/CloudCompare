@@ -41,7 +41,7 @@ export const ComparisonCard: React.FC<ComparisonCardProps> = ({
         </div>
 
         {/* Side by Side Titles Header */}
-        <div className="grid grid-cols-2 gap-3 mb-4 p-3 bg-slate-50 dark:bg-slate-850 rounded-2xl border border-slate-100 dark:border-slate-800">
+        <div className="grid grid-cols-2 gap-3 mb-4 p-3 bg-slate-100 dark:bg-slate-800/80 rounded-2xl border border-slate-200 dark:border-slate-800">
           <div className="space-y-1">
             <PlatformBadge platform="azure" size="sm" />
             <h3 className="font-extrabold text-sm text-slate-900 dark:text-slate-100 group-hover:text-[#0078D4] transition-colors leading-tight">

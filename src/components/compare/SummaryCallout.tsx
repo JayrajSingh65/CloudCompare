@@ -13,7 +13,7 @@ export const SummaryCallout: React.FC<SummaryCalloutProps> = ({
   verdict
 }) => {
   return (
-    <div className="bg-gradient-to-r from-slate-900 via-slate-850 to-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-xl border border-slate-800 space-y-6 relative overflow-hidden">
+    <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-xl border border-slate-800 space-y-6 relative overflow-hidden">
       <div className="absolute top-0 right-0 p-8 opacity-5 pointer-events-none">
         <Scale className="w-48 h-48 text-blue-400" />
       </div>

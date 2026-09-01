@@ -50,7 +50,7 @@ export const ConfigDifferencesTable: React.FC<ConfigDifferencesTableProps> = ({
       <div className="overflow-x-auto">
         <table className="w-full text-left text-xs border-collapse">
           <thead>
-            <tr className="bg-slate-50 dark:bg-slate-850 border-b border-slate-200 dark:border-slate-800 text-slate-500 font-mono uppercase">
+            <tr className="bg-slate-100 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-800 text-slate-500 font-mono uppercase">
               <th className="py-3 px-4 w-1/4">Configuration Option</th>
               <th className="py-3 px-4 w-3/8 text-[#0078D4]">{azureServiceName} (Azure)</th>
               <th className="py-3 px-4 w-3/8 text-[#FF9900]">{awsServiceName} (AWS)</th>

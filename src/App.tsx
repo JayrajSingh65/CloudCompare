@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, NavLink, Link, useLocation } from 'react-router-dom';
 import { CloudDataProvider } from './context/CloudDataContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { AdminLoginModal } from './components/auth/AdminLoginModal';
+import { CommandPalette } from './components/common/CommandPalette';
 import { HomePage } from './pages/HomePage';
 import { BrowsePage } from './pages/BrowsePage';
 import { ComparePage } from './pages/ComparePage';
@@ -23,7 +24,11 @@ import {
   ArrowLeftRight
 } from 'lucide-react';
 
-const NavigationBar: React.FC = () => {
+interface NavigationBarProps {
+  onOpenCommandPalette: () => void;
+}
+
+const NavigationBar: React.FC<NavigationBarProps> = ({ onOpenCommandPalette }) => {
   const location = useLocation();
   const { isAdmin, logout, openLoginModal } = useAuth();
   const isAdminLoginRoute = location.pathname === '/admin-login';
@@ -47,9 +52,6 @@ const NavigationBar: React.FC = () => {
               <span className="font-extrabold text-base tracking-tight font-mono text-slate-900 dark:text-slate-100 leading-none">
                 Cloud<span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0078D4] via-blue-500 to-[#FF9900]">Compare</span>
               </span>
-              {/* <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold uppercase bg-slate-100 dark:bg-slate-800 text-slate-500 border border-slate-200 dark:border-slate-700">
-
-              </span> */}
             </div>
             <span className="text-[10px] font-mono font-medium text-slate-500 dark:text-slate-400 mt-0.5 flex items-center gap-1.5">
               <span className="flex items-center gap-1">
@@ -71,9 +73,10 @@ const NavigationBar: React.FC = () => {
             to="/"
             end
             className={({ isActive }) =>
-              `px-3 py-2 rounded-xl transition-all flex items-center gap-1.5 ${isActive
-                ? 'bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-bold'
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100'
+              `px-3 py-2 rounded-xl transition-all flex items-center gap-1.5 ${
+                isActive
+                  ? 'bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-bold'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100'
               }`
             }
           >
@@ -83,9 +86,10 @@ const NavigationBar: React.FC = () => {
           <NavLink
             to="/browse"
             className={({ isActive }) =>
-              `px-3 py-2 rounded-xl transition-all flex items-center gap-1.5 ${isActive
-                ? 'bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-bold'
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100'
+              `px-3 py-2 rounded-xl transition-all flex items-center gap-1.5 ${
+                isActive
+                  ? 'bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-bold'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100'
               }`
             }
           >
@@ -95,9 +99,10 @@ const NavigationBar: React.FC = () => {
           <NavLink
             to="/compare"
             className={({ isActive }) =>
-              `px-3 py-2 rounded-xl transition-all flex items-center gap-1.5 ${isActive
-                ? 'bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-bold'
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100'
+              `px-3 py-2 rounded-xl transition-all flex items-center gap-1.5 ${
+                isActive
+                  ? 'bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-bold'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100'
               }`
             }
           >
@@ -107,9 +112,10 @@ const NavigationBar: React.FC = () => {
           <NavLink
             to="/matrix"
             className={({ isActive }) =>
-              `px-3 py-2 rounded-xl transition-all flex items-center gap-1.5 ${isActive
-                ? 'bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-bold'
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100'
+              `px-3 py-2 rounded-xl transition-all flex items-center gap-1.5 ${
+                isActive
+                  ? 'bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-bold'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100'
               }`
             }
           >
@@ -121,9 +127,10 @@ const NavigationBar: React.FC = () => {
             <NavLink
               to="/manage"
               className={({ isActive }) =>
-                `px-3 py-2 rounded-xl transition-all flex items-center gap-1.5 ${isActive
-                  ? 'bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-bold'
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100'
+                `px-3 py-2 rounded-xl transition-all flex items-center gap-1.5 ${
+                  isActive
+                    ? 'bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-bold'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100'
                 }`
               }
             >
@@ -132,8 +139,21 @@ const NavigationBar: React.FC = () => {
           )}
         </nav>
 
-        {/* Right Admin Controls */}
+        {/* Right Controls (Cmd + K Search & Admin Controls) */}
         <div className="flex items-center gap-2">
+          {/* Quick Command Palette Button */}
+          <button
+            onClick={onOpenCommandPalette}
+            className="hidden sm:inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-xs font-mono font-medium text-slate-600 dark:text-slate-300 transition-all cursor-pointer border border-slate-200 dark:border-slate-700"
+            title="Open Quick Command Palette (Cmd + K)"
+          >
+            <Search className="w-3.5 h-3.5 text-blue-500" />
+            <span>Search...</span>
+            <kbd className="px-1.5 py-0.5 rounded bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 text-[10px] font-bold text-slate-500">
+              ⌘K
+            </kbd>
+          </button>
+
           {isAdmin ? (
             <div className="flex items-center gap-2">
               <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 text-[11px] font-mono font-bold">
@@ -161,41 +181,65 @@ const NavigationBar: React.FC = () => {
   );
 };
 
+export const AppContent: React.FC = () => {
+  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setIsCommandPaletteOpen(prev => !prev);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans flex flex-col selection:bg-blue-500 selection:text-white">
+      <NavigationBar onOpenCommandPalette={() => setIsCommandPaletteOpen(true)} />
+
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/browse" element={<BrowsePage />} />
+          <Route path="/compare" element={<ComparePage />} />
+          <Route path="/matrix" element={<MatrixPage />} />
+          <Route path="/admin-login" element={<AdminLoginPage />} />
+          <Route
+            path="/manage"
+            element={
+              <ProtectedRoute>
+                <ManagePage />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </main>
+
+      <footer className="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-8 text-center text-xs text-slate-400 font-mono space-y-2">
+        <p>CloudCompare — Azure vs AWS Technical Architecture Reference Engine</p>
+        <p className="text-[11px] text-slate-500 flex items-center justify-center gap-1 font-sans">
+          Made with <span className="text-rose-500">❤️</span> by <span className="font-bold text-slate-700 dark:text-slate-300">Jayraj Singh</span>
+        </p>
+      </footer>
+
+      <AdminLoginModal />
+      <CommandPalette
+        isOpen={isCommandPaletteOpen}
+        onClose={() => setIsCommandPaletteOpen(false)}
+      />
+    </div>
+  );
+};
+
 export const App: React.FC = () => {
   return (
     <BrowserRouter>
       <AuthProvider>
         <CloudDataProvider>
-          <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans flex flex-col selection:bg-blue-500 selection:text-white">
-            <NavigationBar />
-
-            <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
-              <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/browse" element={<BrowsePage />} />
-                <Route path="/compare" element={<ComparePage />} />
-                <Route path="/matrix" element={<MatrixPage />} />
-                <Route path="/admin-login" element={<AdminLoginPage />} />
-                <Route
-                  path="/manage"
-                  element={
-                    <ProtectedRoute>
-                      <ManagePage />
-                    </ProtectedRoute>
-                  }
-                />
-              </Routes>
-            </main>
-
-            <footer className="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-8 text-center text-xs text-slate-400 font-mono space-y-2">
-              <p>CloudCompare — Azure vs AWS Technical Architecture Reference Engine</p>
-              <p className="text-[11px] text-slate-500 flex items-center justify-center gap-1 font-sans">
-                Made with <span className="text-rose-500">❤️</span> by <span className="font-bold text-slate-700 dark:text-slate-300">Jayraj Singh</span>
-              </p>
-            </footer>
-          </div>
-
-          <AdminLoginModal />
+          <AppContent />
         </CloudDataProvider>
       </AuthProvider>
     </BrowserRouter>
