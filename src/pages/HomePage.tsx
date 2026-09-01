@@ -4,14 +4,20 @@ import { useCloudData } from '../context/CloudDataContext';
 import { ComparisonCard } from '../components/compare/ComparisonCard';
 import { PlatformBadge } from '../components/common/PlatformBadge';
 import { CategoryBadge } from '../components/common/CategoryBadge';
+import type { ServiceCategory } from '../types/cloud';
 import {
   Search,
   ArrowRight,
   Columns2,
   TableProperties,
-  Sparkles,
   Zap,
-  ShieldCheck
+  ShieldCheck,
+  Sparkles,
+  ChevronRight,
+  Layers,
+  Cpu,
+  Database,
+  HardDrive
 } from 'lucide-react';
 
 export const HomePage: React.FC = () => {
@@ -32,35 +38,48 @@ export const HomePage: React.FC = () => {
     }
   };
 
-  return (
-    <div className="space-y-16 py-8">
-      {/* Hero Section - Technical Reference Docs Aesthetic */}
-      <section className="relative overflow-hidden pt-8 pb-12 rounded-3xl bg-slate-900 dark:bg-slate-950 text-white border border-slate-800 shadow-2xl">
-        <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none" />
+  const domainPills: { label: string; cat: ServiceCategory; icon: React.ReactNode }[] = [
+    { label: 'Compute & VM', cat: 'Compute', icon: <Cpu className="w-3.5 h-3.5 text-sky-400" /> },
+    { label: 'Storage & Blob', cat: 'Storage', icon: <HardDrive className="w-3.5 h-3.5 text-amber-400" /> },
+    { label: 'Database & SQL', cat: 'Database', icon: <Database className="w-3.5 h-3.5 text-emerald-400" /> },
+    { label: 'Security & Identity', cat: 'Security', icon: <ShieldCheck className="w-3.5 h-3.5 text-purple-400" /> },
+  ];
 
-        <div className="relative max-w-4xl mx-auto px-6 text-center space-y-6">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800/80 border border-slate-700 text-xs font-mono text-slate-300">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            Azure <span className="text-[#0078D4]">#0078D4</span> vs AWS <span className="text-[#FF9900]">#FF9900</span> Specs Engine
+  return (
+    <div className="space-y-16 py-6">
+      {/* Premium Mesh Hero Section */}
+      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white border border-slate-800/80 shadow-2xl p-8 sm:p-14">
+        {/* Ambient Glowing Orbs */}
+        <div className="absolute -top-24 -left-24 w-96 h-96 bg-[#0078D4]/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-[#FF9900]/15 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute inset-0 opacity-15 bg-[radial-gradient(#64748b_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
+
+        <div className="relative max-w-4xl mx-auto text-center space-y-8">
+          {/* Top Pill */}
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-800/90 border border-slate-700/80 text-xs font-mono text-slate-300 shadow-inner">
+            <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
+            <span className="text-[#0078D4] font-bold">Azure #0078D4</span>
+            <span className="text-slate-500">vs</span>
+            <span className="text-[#FF9900] font-bold">AWS #FF9900</span>
+            <span className="text-slate-400">• Multi-Cloud Specs Engine</span>
           </div>
 
           {/* Heading */}
           <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-white leading-tight">
             Cloud Architecture, <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-blue-200 to-amber-300">
-              Side by Side.
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-blue-200 to-amber-400">
+              Side-by-Side Reference.
             </span>
           </h1>
 
           <p className="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto font-normal leading-relaxed">
-            The definitive precision reference tool for cloud engineers and software architects comparing equivalent Azure and AWS services, configuration options, and pricing models.
+            The definitive technical directory for cloud engineers, solution architects, and DevOps teams comparing equivalent Azure and AWS services and configuration specs.
           </p>
 
-          {/* Live Hero Search Bar */}
+          {/* Hero Search Bar */}
           <form
             onSubmit={handleSearchSubmit}
-            className="max-w-xl mx-auto flex items-center p-1.5 rounded-2xl bg-slate-800/90 border border-slate-700/80 shadow-lg focus-within:ring-2 focus-within:ring-blue-500"
+            className="max-w-2xl mx-auto flex items-center p-2 rounded-2xl bg-slate-900/90 border border-slate-700/80 shadow-2xl backdrop-blur-xl focus-within:ring-2 focus-within:ring-blue-500/80 transition-all"
           >
             <div className="flex items-center pl-3 text-slate-400">
               <Search className="w-5 h-5" />
@@ -70,40 +89,60 @@ export const HomePage: React.FC = () => {
               placeholder="Search by service or concept (e.g. S3, Functions, Blob, EC2, NoSQL)..."
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              className="w-full px-3 py-2 text-sm bg-transparent text-white placeholder-slate-400 outline-none"
+              className="w-full px-4 py-2.5 text-sm bg-transparent text-white placeholder-slate-400 outline-none font-sans"
             />
             <button
               type="submit"
-              className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-xs text-white transition-colors cursor-pointer shrink-0"
+              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 font-bold text-xs text-white transition-all cursor-pointer shrink-0 shadow-md flex items-center gap-1.5"
             >
-              Search
+              Search Specs <ChevronRight className="w-4 h-4" />
             </button>
           </form>
 
-          {/* Quick Platform Stats */}
-          <div className="pt-4 flex flex-wrap items-center justify-center gap-6 text-xs font-mono text-slate-400">
-            <div className="flex items-center gap-2">
+          {/* Domain Quick Jump Chips */}
+          <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
+            <span className="text-xs text-slate-400 font-mono mr-1">Popular:</span>
+            {domainPills.map(item => (
+              <button
+                key={item.cat}
+                onClick={() => navigate(`/browse?category=${encodeURIComponent(item.cat)}`)}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700/90 border border-slate-700/60 text-xs font-semibold text-slate-200 transition-all cursor-pointer shadow-xs"
+              >
+                {item.icon}
+                <span>{item.label}</span>
+              </button>
+            ))}
+          </div>
+
+          {/* Stats Counters Bar */}
+          <div className="pt-6 border-t border-slate-800/80 flex flex-wrap items-center justify-center gap-8 text-xs font-mono text-slate-300">
+            <div className="flex items-center gap-2 bg-slate-900/60 px-3.5 py-1.5 rounded-xl border border-slate-800">
               <PlatformBadge platform="azure" size="sm" />
-              <span>{azureCount} Azure Services</span>
+              <span className="font-bold text-white">{azureCount}</span> Azure Services
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 bg-slate-900/60 px-3.5 py-1.5 rounded-xl border border-slate-800">
               <PlatformBadge platform="aws" size="sm" />
-              <span>{awsCount} AWS Services</span>
+              <span className="font-bold text-white">{awsCount}</span> AWS Services
             </div>
-            <div className="flex items-center gap-2 text-slate-300">
+            <div className="flex items-center gap-2 bg-slate-900/60 px-3.5 py-1.5 rounded-xl border border-slate-800 text-sky-300">
               <Columns2 className="w-4 h-4 text-blue-400" />
-              <span>{pairs.length} Comparison Pairs</span>
+              <span className="font-bold text-white">{pairs.length}</span> Comparison Pairs
             </div>
           </div>
         </div>
       </section>
 
-      {/* Category Quick Jump */}
-      <section className="space-y-4">
+      {/* Category Domain Grid */}
+      <section className="space-y-5">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100 font-mono tracking-tight">
-            Browse Cloud Domains
-          </h2>
+          <div>
+            <h2 className="text-xl font-extrabold text-slate-900 dark:text-slate-100 font-mono tracking-tight flex items-center gap-2">
+              <Layers className="w-5 h-5 text-blue-500" /> Browse Cloud Domains
+            </h2>
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              Explore Azure vs AWS services categorized by architectural domain
+            </p>
+          </div>
           <Link
             to="/browse"
             className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1"
@@ -112,30 +151,35 @@ export const HomePage: React.FC = () => {
           </Link>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
-          {categories.map(cat => (
-            <button
-              key={cat}
-              onClick={() => navigate(`/browse?category=${encodeURIComponent(cat)}`)}
-              className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-md transition-all text-left group cursor-pointer"
-            >
-              <CategoryBadge category={cat} className="mb-2" />
-              <div className="text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-blue-600 dark:group-hover:text-blue-400">
-                {cat}
-              </div>
-              <div className="text-[11px] text-slate-400 font-mono mt-1">
-                {services.filter(s => s.category === cat).length} services
-              </div>
-            </button>
-          ))}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
+          {categories.map(cat => {
+            const count = services.filter(s => s.category === cat).length;
+            return (
+              <button
+                key={cat}
+                onClick={() => navigate(`/browse?category=${encodeURIComponent(cat)}`)}
+                className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-xl transition-all text-left group cursor-pointer flex flex-col justify-between"
+              >
+                <div>
+                  <CategoryBadge category={cat} className="mb-3" />
+                  <div className="text-xs font-bold text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                    {cat}
+                  </div>
+                </div>
+                <div className="text-[11px] text-slate-400 font-mono mt-3 pt-2 border-t border-slate-100 dark:border-slate-800">
+                  {count} {count === 1 ? 'service' : 'services'}
+                </div>
+              </button>
+            );
+          })}
         </div>
       </section>
 
-      {/* Featured Side-by-Side Comparison Cards */}
+      {/* Featured Comparisons Section */}
       <section className="space-y-6">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 tracking-tight font-mono">
+            <h2 className="text-xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight font-mono">
               Featured Side-by-Side Comparisons
             </h2>
             <p className="text-xs text-slate-500 dark:text-slate-400">
@@ -144,9 +188,9 @@ export const HomePage: React.FC = () => {
           </div>
           <Link
             to="/matrix"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-xs font-bold text-slate-800 dark:text-slate-200 transition-colors"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-bold text-slate-800 dark:text-slate-200 transition-colors shadow-xs"
           >
-            <TableProperties className="w-3.5 h-3.5" /> Open Matrix View
+            <TableProperties className="w-4 h-4 text-blue-500" /> Open Full Matrix
           </Link>
         </div>
 
@@ -167,40 +211,28 @@ export const HomePage: React.FC = () => {
       </section>
 
       {/* Feature Highlights Grid */}
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-slate-200 dark:border-slate-800">
-        <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2">
-          <div className="w-9 h-9 rounded-xl bg-sky-100 dark:bg-sky-950 text-[#0078D4] flex items-center justify-center font-bold mb-3">
+      <section className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 border-t border-slate-200 dark:border-slate-800">
+        <div className="p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-3 shadow-md hover:shadow-xl transition-all">
+          <div className="w-10 h-10 rounded-2xl bg-sky-100 dark:bg-sky-950/80 text-[#0078D4] flex items-center justify-center font-bold">
             <Zap className="w-5 h-5" />
           </div>
-          <h3 className="font-bold text-sm text-slate-900 dark:text-slate-100">
+          <h3 className="font-extrabold text-base text-slate-900 dark:text-slate-100 font-mono">
             Aligned Configuration Matrix
           </h3>
           <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-            Spot exact configuration key name differences, default settings, and capability divergence in a clean side-by-side grid.
+            Spot exact configuration key name differences, default settings, and capability divergence in a clean side-by-side spec grid.
           </p>
         </div>
 
-        <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2">
-          <div className="w-9 h-9 rounded-xl bg-amber-100 dark:bg-amber-950 text-[#FF9900] flex items-center justify-center font-bold mb-3">
+        <div className="p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-3 shadow-md hover:shadow-xl transition-all">
+          <div className="w-10 h-10 rounded-2xl bg-amber-100 dark:bg-amber-950/80 text-[#FF9900] flex items-center justify-center font-bold">
             <ShieldCheck className="w-5 h-5" />
           </div>
-          <h3 className="font-bold text-sm text-slate-900 dark:text-slate-100">
+          <h3 className="font-extrabold text-base text-slate-900 dark:text-slate-100 font-mono">
             Architect Decision Guidance
           </h3>
           <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-            Concise executive summaries and architect recommendations detailing when to choose Azure vs AWS for specific workloads.
-          </p>
-        </div>
-
-        <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2">
-          <div className="w-9 h-9 rounded-xl bg-emerald-100 dark:bg-emerald-950 text-emerald-600 flex items-center justify-center font-bold mb-3">
-            <Sparkles className="w-5 h-5" />
-          </div>
-          <h3 className="font-bold text-sm text-slate-900 dark:text-slate-100">
-            Content Editor & Bulk Importer
-          </h3>
-          <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-            Add custom services, modify existing specs, preview markdown in real-time, or bulk import custom JSON/CSV service definitions.
+            Concise executive summaries and architect recommendations detailing when to choose Azure vs AWS for specific enterprise workloads.
           </p>
         </div>
       </section>
