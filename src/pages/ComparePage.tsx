@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { useCloudData } from '../context/CloudDataContext';
+import { useAuth } from '../context/AuthContext';
 import { PlatformBadge } from '../components/common/PlatformBadge';
 import { CategoryBadge } from '../components/common/CategoryBadge';
 import { MarkdownViewer } from '../components/common/MarkdownViewer';
@@ -22,6 +23,7 @@ import {
 export const ComparePage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { services, getService, getPair } = useCloudData();
+  const { isAdmin } = useAuth();
 
   const azureServices = services.filter(s => s.platform === 'azure');
   const awsServices = services.filter(s => s.platform === 'aws');
@@ -178,12 +180,14 @@ export const ComparePage: React.FC = () => {
           <span>
             Custom selection: No pre-written executive summary pair exists for this specific combination yet.
           </span>
-          <Link
-            to="/manage"
-            className="font-bold underline text-amber-900 dark:text-amber-200 ml-2"
-          >
-            Create Pair Summary in Manager
-          </Link>
+          {isAdmin && (
+            <Link
+              to="/manage"
+              className="font-bold underline text-amber-900 dark:text-amber-200 ml-2"
+            >
+              Create Pair Summary in Manager
+            </Link>
+          )}
         </div>
       )}
 

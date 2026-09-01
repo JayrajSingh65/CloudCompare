@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { ShieldAlert, KeyRound, ArrowLeft } from 'lucide-react';
+import { ShieldAlert, KeyRound, ArrowLeft, LogIn } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 interface ProtectedRouteProps {
@@ -32,10 +32,10 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 
       <div className="space-y-2">
         <h2 className="text-xl font-extrabold text-slate-900 dark:text-slate-100 font-mono">
-          Admin Access Required
+          Admin Access Restricted
         </h2>
         <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-          The Content Manager and editing tools are restricted to authorized cloud administrators only.
+          The Content Manager is restricted to authorized cloud administrators. Please log in at <code className="font-bold text-blue-600 dark:text-blue-400 font-mono">/admin-login</code> to proceed.
         </p>
       </div>
 
@@ -58,9 +58,6 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
               className="w-full pl-9 pr-3 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100 outline-none focus:ring-2 focus:ring-blue-500 font-mono"
             />
           </div>
-          <div className="text-[11px] text-slate-400 font-mono">
-            Default passcode for demo: <span className="font-bold text-blue-600 dark:text-blue-400">admin123</span>
-          </div>
         </div>
 
         {error && (
@@ -77,12 +74,18 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
         </button>
       </form>
 
-      <div className="pt-4 border-t border-slate-100 dark:border-slate-800">
+      <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs">
         <Link
           to="/"
-          className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 font-semibold"
+          className="inline-flex items-center gap-1 text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 font-semibold"
         >
-          <ArrowLeft className="w-3.5 h-3.5" /> Return to Public Dashboard
+          <ArrowLeft className="w-3.5 h-3.5" /> Dashboard
+        </Link>
+        <Link
+          to="/admin-login"
+          className="inline-flex items-center gap-1 text-blue-600 dark:text-blue-400 hover:underline font-bold"
+        >
+          <LogIn className="w-3.5 h-3.5" /> Admin Login Portal
         </Link>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, NavLink, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, NavLink, Link, useLocation } from 'react-router-dom';
 import { CloudDataProvider } from './context/CloudDataContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
@@ -9,6 +9,7 @@ import { BrowsePage } from './pages/BrowsePage';
 import { ComparePage } from './pages/ComparePage';
 import { MatrixPage } from './pages/MatrixPage';
 import { ManagePage } from './pages/ManagePage';
+import { AdminLoginPage } from './pages/AdminLoginPage';
 import {
   Columns2,
   Home,
@@ -22,7 +23,9 @@ import {
 } from 'lucide-react';
 
 const NavigationBar: React.FC = () => {
+  const location = useLocation();
   const { isAdmin, logout, openLoginModal } = useAuth();
+  const isAdminLoginRoute = location.pathname === '/admin-login';
 
   return (
     <header className="sticky top-0 z-40 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
@@ -99,18 +102,21 @@ const NavigationBar: React.FC = () => {
             <TableProperties className="w-4 h-4" /> Matrix
           </NavLink>
 
-          <NavLink
-            to="/manage"
-            className={({ isActive }) =>
-              `px-3 py-2 rounded-xl transition-all flex items-center gap-1.5 ${
-                isActive
-                  ? 'bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-bold'
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100'
-              }`
-            }
-          >
-            <Settings className="w-4 h-4" /> Manage
-          </NavLink>
+          {/* Manage route is ONLY shown if user is authenticated as Admin */}
+          {isAdmin && (
+            <NavLink
+              to="/manage"
+              className={({ isActive }) =>
+                `px-3 py-2 rounded-xl transition-all flex items-center gap-1.5 ${
+                  isActive
+                    ? 'bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-bold'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100'
+                }`
+              }
+            >
+              <Settings className="w-4 h-4" /> Manage
+            </NavLink>
+          )}
         </nav>
 
         {/* Right Admin Controls */}
@@ -128,14 +134,14 @@ const NavigationBar: React.FC = () => {
                 <LogOut className="w-3.5 h-3.5" /> Logout
               </button>
             </div>
-          ) : (
+          ) : isAdminLoginRoute ? (
             <button
               onClick={openLoginModal}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 hover:bg-blue-600 dark:hover:bg-blue-400 transition-all text-xs font-bold shadow-xs cursor-pointer"
             >
               <Lock className="w-3.5 h-3.5" /> Admin Login
             </button>
-          )}
+          ) : null}
         </div>
       </div>
     </header>
@@ -156,6 +162,7 @@ export const App: React.FC = () => {
                 <Route path="/browse" element={<BrowsePage />} />
                 <Route path="/compare" element={<ComparePage />} />
                 <Route path="/matrix" element={<MatrixPage />} />
+                <Route path="/admin-login" element={<AdminLoginPage />} />
                 <Route
                   path="/manage"
                   element={

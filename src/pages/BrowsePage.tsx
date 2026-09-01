@@ -12,15 +12,14 @@ import {
   List as ListIcon,
   ArrowRight,
   Columns2,
-  PlusCircle,
-  Lock
+  PlusCircle
 } from 'lucide-react';
 
 export const BrowsePage: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const { services, categories, getService } = useCloudData();
-  const { isAdmin, openLoginModal } = useAuth();
+  const { isAdmin } = useAuth();
 
   const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '');
   const [selectedPlatform, setSelectedPlatform] = useState<'all' | Platform>(
@@ -74,13 +73,6 @@ export const BrowsePage: React.FC = () => {
     setSearchParams({});
   };
 
-  const handleAddServiceClick = (e: React.MouseEvent) => {
-    if (!isAdmin) {
-      e.preventDefault();
-      openLoginModal();
-    }
-  };
-
   return (
     <div className="space-y-8 py-4">
       {/* Page Title Header */}
@@ -94,14 +86,15 @@ export const BrowsePage: React.FC = () => {
           </p>
         </div>
 
-        <Link
-          to="/manage"
-          onClick={handleAddServiceClick}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 text-xs font-bold hover:bg-blue-600 dark:hover:bg-blue-400 dark:hover:text-white transition-colors cursor-pointer self-start sm:self-auto"
-        >
-          {isAdmin ? <PlusCircle className="w-4 h-4" /> : <Lock className="w-3.5 h-3.5" />}
-          Add Service Entry
-        </Link>
+        {/* Add Service Entry button is ONLY shown if user is an Admin */}
+        {isAdmin && (
+          <Link
+            to="/manage"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 text-xs font-bold hover:bg-blue-600 dark:hover:bg-blue-400 dark:hover:text-white transition-colors cursor-pointer self-start sm:self-auto"
+          >
+            <PlusCircle className="w-4 h-4" /> Add Service Entry
+          </Link>
+        )}
       </div>
 
       {/* Filter & View Control Bar */}
@@ -307,7 +300,7 @@ export const BrowsePage: React.FC = () => {
                     </button>
                   ) : (
                     <div className="text-[11px] text-slate-400 italic">
-                      No counterpart linked yet
+                      Standalone Service
                     </div>
                   )}
                 </div>
@@ -374,14 +367,15 @@ export const BrowsePage: React.FC = () => {
                         >
                           <Columns2 className="w-3.5 h-3.5" /> Compare
                         </button>
-                      ) : (
+                      ) : isAdmin ? (
                         <Link
                           to="/manage"
-                          onClick={handleAddServiceClick}
-                          className="text-slate-400 hover:text-blue-600 font-medium"
+                          className="text-blue-600 hover:underline font-bold"
                         >
                           Link Pair
                         </Link>
+                      ) : (
+                        <span className="text-slate-400 font-mono text-[11px]">—</span>
                       )}
                     </td>
                   </tr>

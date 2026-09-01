@@ -3,6 +3,7 @@ import { useCloudData } from '../context/CloudDataContext';
 import { ServiceForm } from '../components/manage/ServiceForm';
 import { BulkImportModal } from '../components/manage/BulkImportModal';
 import { PairLinkerModal } from '../components/manage/PairLinkerModal';
+import { ChangePasswordModal } from '../components/auth/ChangePasswordModal';
 import { PlatformBadge } from '../components/common/PlatformBadge';
 import { CategoryBadge } from '../components/common/CategoryBadge';
 import type { ServiceEntry, ComparisonPair } from '../types/cloud';
@@ -15,7 +16,8 @@ import {
   RefreshCw,
   Search,
   CheckCircle2,
-  Layers
+  Layers,
+  Key
 } from 'lucide-react';
 
 export const ManagePage: React.FC = () => {
@@ -33,6 +35,7 @@ export const ManagePage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isBulkModalOpen, setIsBulkModalOpen] = useState(false);
   const [isPairModalOpen, setIsPairModalOpen] = useState(false);
+  const [isChangePassOpen, setIsChangePassOpen] = useState(false);
   const [editingPair, setEditingPair] = useState<ComparisonPair | undefined>(undefined);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
 
@@ -93,6 +96,12 @@ export const ManagePage: React.FC = () => {
         {/* Global Manager Actions */}
         <div className="flex flex-wrap items-center gap-2">
           <button
+            onClick={() => setIsChangePassOpen(true)}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-xs font-bold text-slate-800 dark:text-slate-200 transition-colors cursor-pointer"
+          >
+            <Key className="w-4 h-4 text-amber-500" /> Change Passcode
+          </button>
+          <button
             onClick={() => setIsBulkModalOpen(true)}
             className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-xs font-bold text-slate-800 dark:text-slate-200 transition-colors cursor-pointer"
           >
@@ -105,7 +114,7 @@ export const ManagePage: React.FC = () => {
             }}
             className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-xs font-bold text-slate-800 dark:text-slate-200 transition-colors cursor-pointer"
           >
-            <Link2 className="w-4 h-4 text-amber-500" /> Link Service Pair
+            <Link2 className="w-4 h-4 text-emerald-500" /> Link Service Pair
           </button>
           <button
             onClick={handleStartCreate}
@@ -321,6 +330,10 @@ export const ManagePage: React.FC = () => {
         isOpen={isPairModalOpen}
         onClose={() => setIsPairModalOpen(false)}
         initialPair={editingPair}
+      />
+      <ChangePasswordModal
+        isOpen={isChangePassOpen}
+        onClose={() => setIsChangePassOpen(false)}
       />
     </div>
   );
