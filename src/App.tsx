@@ -189,8 +189,8 @@ export const App: React.FC = () => {
 
             <footer className="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-8 text-center text-xs text-slate-400 font-mono space-y-2">
               <p>CloudCompare — Azure vs AWS Technical Architecture Reference Engine</p>
-              <p className="text-[11px] text-slate-500">
-                Built for Cloud Engineers, Solutions Architects, and DevOps Professionals
+              <p className="text-[11px] text-slate-500 flex items-center justify-center gap-1 font-sans">
+                Made with <span className="text-rose-500">❤️</span> by <span className="font-bold text-slate-700 dark:text-slate-300">Jayraj Singh</span>
               </p>
             </footer>
           </div>

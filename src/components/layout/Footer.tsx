@@ -1,5 +1,5 @@
 import React from 'react';
-import { RefreshCw, ExternalLink, Code2 } from 'lucide-react';
+import { RefreshCw, ExternalLink } from 'lucide-react';
 import { useCloudData } from '../../context/CloudDataContext';
 
 export const Footer: React.FC = () => {
@@ -73,8 +73,8 @@ export const Footer: React.FC = () => {
 
         <div className="pt-6 border-t border-slate-100 dark:border-slate-800/60 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 font-mono">
           <div>© {new Date().getFullYear()} CloudCompare. Open Architecture.</div>
-          <div className="flex items-center gap-1 mt-2 sm:mt-0">
-            <Code2 className="w-3.5 h-3.5" /> React 19 + TypeScript + Tailwind CSS v4
+          <div className="flex items-center gap-1 mt-2 sm:mt-0 font-sans">
+            Made with <span className="text-rose-500">❤️</span> by <span className="font-bold text-slate-700 dark:text-slate-300 font-sans">Jayraj Singh</span>
           </div>
         </div>
       </div>
