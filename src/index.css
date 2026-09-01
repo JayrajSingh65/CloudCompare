@@ -1,0 +1,69 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --color-azure: #0078D4;
+    --color-azure-hover: #106EBE;
+    --color-azure-light: #EFF6FC;
+    --color-aws: #FF9900;
+    --color-aws-hover: #EC7211;
+    --color-aws-light: #FFF8E7;
+  }
+
+  .dark {
+    --color-azure-light: #0B2545;
+    --color-aws-light: #3D2400;
+  }
+
+  body {
+    @apply bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 font-sans antialiased min-h-screen selection:bg-blue-500 selection:text-white transition-colors duration-200;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+}
+
+/* Custom scrollbar for technical docs aesthetic */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-300 dark:bg-slate-700 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-slate-400 dark:bg-slate-600;
+}
+
+/* Glassmorphism & custom utility classes */
+.glass-panel {
+  @apply bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border border-slate-200/80 dark:border-slate-800/80;
+}
+
+.azure-border {
+  border-color: #0078D4;
+}
+
+.aws-border {
+  border-color: #FF9900;
+}
+
+.azure-bg-subtle {
+  background-color: rgba(0, 120, 212, 0.08);
+}
+
+.aws-bg-subtle {
+  background-color: rgba(255, 153, 0, 0.08);
+}
+
+.azure-badge {
+  @apply bg-sky-100 text-[#0078D4] dark:bg-blue-950/80 dark:text-sky-400 border border-sky-300/60 dark:border-sky-800/60;
+}
+
+.aws-badge {
+  @apply bg-amber-100 text-[#D97706] dark:bg-amber-950/80 dark:text-amber-400 border border-amber-300/60 dark:border-amber-800/60;
+}
